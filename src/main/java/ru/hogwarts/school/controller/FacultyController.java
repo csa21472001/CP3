@@ -11,22 +11,24 @@ import java.util.List;
 @RequestMapping("faculty")
 public class FacultyController {
 
-    FacultyService facultyService;
+    private final FacultyService facultyService;
 
     public FacultyController(FacultyService facultyService) {
         this.facultyService = facultyService;
     }
+
     @GetMapping("{id}")
     public Faculty getFacultyInfo(@PathVariable Long id) {
         return facultyService.findFaculty(id);
     }
 
     @PostMapping
-    public Faculty addFaculty(Faculty faculty) {
+    public Faculty addFaculty(@RequestBody Faculty faculty) {
         return facultyService.addFaculty(faculty);
     }
+
     @PutMapping
-    public Faculty editFaculty(Faculty faculty) {
+    public Faculty editFaculty(@RequestBody Faculty faculty) {
         return facultyService.editFaculty(faculty);
     }
 
@@ -36,7 +38,7 @@ public class FacultyController {
     }
 
     @GetMapping("/color/{color}")
-    public List<Faculty> findFacultyWithColor (@PathVariable String color) {
+    public List<Faculty> findFacultyWithColor(@PathVariable String color) {
         return facultyService.findFacultyWithColor(color);
     }
 }

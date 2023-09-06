@@ -16,6 +16,7 @@ public class ControllerExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ex.getMessage());
     }
+
     @ExceptionHandler(FacultyException.class)
     public ResponseEntity<String> handleStudentException(FacultyException ex) {
         return ResponseEntity
