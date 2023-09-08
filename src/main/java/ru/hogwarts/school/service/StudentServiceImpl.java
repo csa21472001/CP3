@@ -3,63 +3,86 @@ package ru.hogwarts.school.service;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.StudentException;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.StudentRepository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 
 @Service
 public class StudentServiceImpl implements StudentService {
-    private final Map<Long, Student> mapOfStudents = new HashMap<>();
-    private long id;
+//    private final Map<Long, Student> mapOfStudents = new HashMap<>();
+//    private long id;
+
+    private final StudentRepository studentRepository;
+
+    public StudentServiceImpl(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     @Override
     public Student addStudent(Student student) {
-        if (mapOfStudents.containsValue(student)) {
+//        if (mapOfStudents.containsValue(student)) {
+//
+//        }
+        if (studentRepository.findByNameAndAge(student.getName(), student.getAge()).isPresent()) {
             throw new StudentException("Ошибка операции!" +
                     " (добавлен ранее)");
         }
-        student.setId(++id);
-        mapOfStudents.put(student.getId(), student);
-        return student;
+//        student.setId(++id);
+//        mapOfStudents.put(student.getId(), student);
+
+        return studentRepository.save(student) ;
     }
 
     @Override
     public Student findStudent(long id) {
-        if (!mapOfStudents.containsKey(id)) {
+//        if (!mapOfStudents.containsKey(id)) {
+//
+//        }
+        Optional<Student> student = studentRepository.findById(id);
+
+        if (student.isEmpty()) {
             throw new StudentException("Ошибка операции!" +
                     " (не найден)");
         }
-        return mapOfStudents.get(id);
+
+        return student.get();
     }
 
     @Override
     public Student editStudent(Student student) {
-        if (!mapOfStudents.containsKey(student.getId())) {
+//        if (!mapOfStudents.containsKey(student.getId())) {
+//
+//        }
+        if (studentRepository.findById(student.getId()).isEmpty()) {
             throw new StudentException("Ошибка операции!" +
                     " (не найден)");
         }
-        mapOfStudents.put(student.getId(), student);
-        return student;
+//        mapOfStudents.put(student.getId(), student);
+        return studentRepository.save(student);
     }
+
 
     @Override
     public Student deleteStudent(long id) {
-        Student student = mapOfStudents.remove(id);
-        if (student == null) {
+//        Student student = mapOfStudents.remove(id);
+//        if (student == null) {
+//
+//        }
+        Optional<Student> student = studentRepository.findById(id);
+
+        if (student.isEmpty()) {
             throw new StudentException("Ошибка операции!" +
                     " (не найден) ");
         }
-        return student;
+        studentRepository.deleteById(id);
+        return student.get();
     }
 
     @Override
     public List<Student> findStudentAge(int age) {
-        return mapOfStudents.values()
-                .stream()
-                .filter(entry -> entry.getAge() == age)
-                .toList();
+        return studentRepository.findByAge(age);
     }
 
 

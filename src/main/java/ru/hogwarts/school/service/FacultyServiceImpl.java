@@ -3,63 +3,84 @@ package ru.hogwarts.school.service;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.FacultyException;
 import ru.hogwarts.school.model.Faculty;
-
-import java.util.HashMap;
+import ru.hogwarts.school.repository.FacultyRepository;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
+
 
 @Service
 public class FacultyServiceImpl implements FacultyService {
-    private final Map<Long, Faculty> mapOfFaculty = new HashMap<>();
-    private long lastId;
+//    private final Map<Long, Faculty> mapOfFacultys = new HashMap<>();
+//    private long id;
+    private final FacultyRepository facultyRepository;
+
+    public FacultyServiceImpl(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
 
     @Override
     public Faculty addFaculty(Faculty faculty) {
-        if (mapOfFaculty.containsValue(faculty)) {
+//        if (mapOfFacultys.containsValue(faculty)) {
+//
+//        }
+        if (facultyRepository.findByNameAndColor(faculty.getName(), faculty.getColor()).isPresent()) {
             throw new FacultyException("Ошибка операции!" +
                     " (добавлен ранее)");
         }
-        faculty.setId(++lastId);
-        mapOfFaculty.put(faculty.getId(), faculty);
-        return faculty;
+//        faculty.setId(++id);
+//        mapOfFacultys.put(faculty.getId(), faculty);
+
+        return facultyRepository.save(faculty) ;
     }
 
     @Override
     public Faculty findFaculty(long id) {
-        if (!mapOfFaculty.containsKey(id)) {
+//        if (!mapOfFacultys.containsKey(id)) {
+//
+//        }
+        Optional<Faculty> faculty = facultyRepository.findById(id);
+
+        if (faculty.isEmpty()) {
             throw new FacultyException("Ошибка операции!" +
                     " (не найден)");
         }
-        return mapOfFaculty.get(id);
+
+        return faculty.get();
     }
 
     @Override
     public Faculty editFaculty(Faculty faculty) {
-        if (!mapOfFaculty.containsKey(faculty.getId())) {
+//        if (!mapOfFacultys.containsKey(faculty.getId())) {
+//
+//        }
+        if (facultyRepository.findById(faculty.getId()).isEmpty()) {
             throw new FacultyException("Ошибка операции!" +
                     " (не найден)");
         }
-        mapOfFaculty.put(faculty.getId(), faculty);
-        return faculty;
+//        mapOfFacultys.put(faculty.getId(), faculty);
+        return facultyRepository.save(faculty);
     }
+
 
     @Override
     public Faculty deleteFaculty(long id) {
-        Faculty faculty = mapOfFaculty.remove(id);
-        if (faculty == null) {
+//        Faculty faculty = mapOfFacultys.remove(id);
+//        if (faculty == null) {
+//
+//        }
+        Optional<Faculty> faculty = facultyRepository.findById(id);
+
+        if (faculty.isEmpty()) {
             throw new FacultyException("Ошибка операции!" +
                     " (не найден) ");
         }
-        return faculty;
+        facultyRepository.deleteById(id);
+        return faculty.get();
     }
 
     @Override
     public List<Faculty> findFacultyWithColor(String color) {
-        return mapOfFaculty.values()
-                .stream()
-                .filter(entry -> entry.getColor().equals(color))
-                .toList();
+        return facultyRepository.findByColor(color);
     }
 
 }
