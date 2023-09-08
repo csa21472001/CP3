@@ -3,9 +3,15 @@ package ru.hogwarts.school.model;
 import java.util.Objects;
 
 public class Faculty {
-    Long id;
-    String name;
-    String color;
+    private Long id;
+    private String name;
+    private String color;
+
+    public Faculty(Long id, String name, String color) {
+        this.id = id;
+        this.name = name;
+        this.color = color;
+    }
 
     public Long getId() {
         return id;
@@ -18,7 +24,6 @@ public class Faculty {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -35,7 +40,7 @@ public class Faculty {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Faculty faculty)) return false;
-        return Objects.equals(id, faculty.id) && Objects.equals(name, faculty.name) && Objects.equals(color, faculty.color);
+        return Objects.equals(name, faculty.name) && Objects.equals(color, faculty.color);
     }
 
     @Override
