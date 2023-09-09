@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.FacultyException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
+import ru.hogwarts.school.repository.StudentRepository;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -13,9 +15,12 @@ public class FacultyServiceImpl implements FacultyService {
 //    private final Map<Long, Faculty> mapOfFacultys = new HashMap<>();
 //    private long id;
     private final FacultyRepository facultyRepository;
+    private final StudentRepository studentRepository;
 
-    public FacultyServiceImpl(FacultyRepository facultyRepository) {
+    public FacultyServiceImpl(FacultyRepository facultyRepository
+            ,StudentRepository studentRepository) {
         this.facultyRepository = facultyRepository;
+        this.studentRepository = studentRepository;
     }
 
     @Override
@@ -44,7 +49,6 @@ public class FacultyServiceImpl implements FacultyService {
             throw new FacultyException("Ошибка операции!" +
                     " (не найден)");
         }
-
         return faculty.get();
     }
 
@@ -55,7 +59,7 @@ public class FacultyServiceImpl implements FacultyService {
 //        }
         if (facultyRepository.findById(faculty.getId()).isEmpty()) {
             throw new FacultyException("Ошибка операции!" +
-                    " (не найден)");
+                    " (не найден факультет с таким айди)");
         }
 //        mapOfFacultys.put(faculty.getId(), faculty);
         return facultyRepository.save(faculty);
@@ -82,5 +86,15 @@ public class FacultyServiceImpl implements FacultyService {
     public List<Faculty> findFacultyWithColor(String color) {
         return facultyRepository.findByColor(color);
     }
+
+//    @Override
+//    public List<Student> findById(long id) {
+//        return studentRepository.findByFaculty_id(id);
+//    }
+
+//    @Override
+//    public List<Faculty> getAll() {
+//        return facultyRepository.findAll();
+//    }
 
 }

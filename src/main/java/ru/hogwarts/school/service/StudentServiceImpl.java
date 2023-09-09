@@ -2,7 +2,9 @@ package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.StudentException;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.List;
@@ -15,8 +17,10 @@ public class StudentServiceImpl implements StudentService {
 //    private long id;
 
     private final StudentRepository studentRepository;
-
-    public StudentServiceImpl(StudentRepository studentRepository) {
+    private final FacultyRepository facultyRepository;
+    public StudentServiceImpl(StudentRepository studentRepository
+            ,FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
         this.studentRepository = studentRepository;
     }
 
@@ -27,7 +31,7 @@ public class StudentServiceImpl implements StudentService {
 //        }
         if (studentRepository.findByNameAndAge(student.getName(), student.getAge()).isPresent()) {
             throw new StudentException("Ошибка операции!" +
-                    " (добавлен ранее)");
+                    "(добавлен ранее)");
         }
 //        student.setId(++id);
 //        mapOfStudents.put(student.getId(), student);
@@ -44,7 +48,7 @@ public class StudentServiceImpl implements StudentService {
 
         if (student.isEmpty()) {
             throw new StudentException("Ошибка операции!" +
-                    " (не найден)");
+                    "(не найден)");
         }
 
         return student.get();
@@ -57,7 +61,7 @@ public class StudentServiceImpl implements StudentService {
 //        }
         if (studentRepository.findById(student.getId()).isEmpty()) {
             throw new StudentException("Ошибка операции!" +
-                    " (не найден)");
+                    "(не найден)");
         }
 //        mapOfStudents.put(student.getId(), student);
         return studentRepository.save(student);
@@ -67,23 +71,38 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student deleteStudent(long id) {
 //        Student student = mapOfStudents.remove(id);
-//        if (student == null) {
-//
-//        }
+//        if (student == null) {}
+
         Optional<Student> student = studentRepository.findById(id);
 
         if (student.isEmpty()) {
             throw new StudentException("Ошибка операции!" +
-                    " (не найден) ");
+                    "(не найден) ");
         }
         studentRepository.deleteById(id);
         return student.get();
     }
 
     @Override
-    public List<Student> findStudentAge(int age) {
+    public List<Student> findStudentWithAge(int age) {
         return studentRepository.findByAge(age);
     }
 
+//    @Override
+//    public Faculty findByNameAndAge(String name, int age) {
+//
+//        if (studentRepository.findByNameAndAge(name, age).isEmpty()) {
+//            throw new StudentException("Ошибка операции!" +
+//                    "(не найден) ");
+//        }
+//        return studentRepository.findByNameAndAge(name, age).get().getFaculty();
+//    }
+//
+
+//    @Override
+//    public List<Student> getAll() {
+//        return studentRepository.findAll();
+//    }
+//
 
 }

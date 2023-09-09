@@ -8,4 +8,7 @@ import java.util.Optional;
 public interface StudentRepository extends JpaRepository<Student, Long> {
     Optional<Student> findByNameAndAge(String name, int age);
     List<Student> findByAge(int age);
+//    List<Student> findAll();
+//    List<Student> findByFaculty_id(long faculty_id);
+
 }

@@ -1,8 +1,7 @@
 package ru.hogwarts.school.service;
-
 import ru.hogwarts.school.model.Student;
-
 import java.util.List;
+
 
 
 public interface StudentService {
@@ -14,5 +13,9 @@ public interface StudentService {
 
     Student deleteStudent(long id);
 
-    List<Student> findStudentAge(int age);
+    List<Student> findStudentWithAge(int age);
+
+//    Faculty findByNameAndAge(String name, int age);
+
+//    List<Student> getAll();
 }
