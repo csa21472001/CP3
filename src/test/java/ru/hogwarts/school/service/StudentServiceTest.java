@@ -1,77 +1,99 @@
 package ru.hogwarts.school.service;
-
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.hogwarts.school.exception.StudentException;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+@ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
+    @InjectMocks
+    StudentServiceImpl underTest;
 
-    StudentServiceImpl underTest = new StudentServiceImpl();
-    Student student = new Student(0L, "Harry", 10);
+    @Mock
+    StudentRepository studentRepository;
+
+//    StudentServiceImpl underTest = new StudentServiceImpl(54);
+    Student student = new Student(1L, "Harry", 10);
 
     @Test
     void addStudent_newStudent_studentAdded() {
-        Student studentFromCheck = underTest.addStudent(student);
-        assertEquals(student, studentFromCheck);
+        when(studentRepository.findByNameAndAge(student.getName(), student.getAge()))
+                .thenReturn(Optional.empty());
+        when(studentRepository.save(student)).thenReturn(student);
+        Student studentCheck = underTest.addStudent(student);
+        assertEquals(student, studentCheck);
+//        assertTrue(underTest.getAll().contains(student));
     }
 
     @Test
-    void addStudent_repeatedStudentValue_ThrowException() {
-        underTest.addStudent(student);
+    void addStudent_repeatedStudentValue_throwException() {
+        when(studentRepository.findByNameAndAge(student.getName(), student.getAge()))
+                .thenReturn(Optional.of(student));
+//        underTest.addStudent(student);
         assertThrows(StudentException.class,
                 () -> underTest.addStudent(student));
     }
 
     @Test
     void findStudent_studentToFind_returnFoundStudent() {
-        underTest.addStudent(student);
-        assertEquals(student, underTest.findStudent(1));
+        when(studentRepository.findById(4L)).thenReturn(Optional.of(student));
+        Student studentCheck = underTest.findStudent(4);
+        assertEquals(student, studentCheck);
     }
 
     @Test
-    void findStudent_idOfStudentThatCannotBeFound_ThrowException() {
+    void findStudent_studentThatCannotBeFound_throwException() {
+        when(studentRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(StudentException.class,
-                () -> underTest.findStudent(1));
+                () -> underTest.findStudent(1L));
     }
 
     @Test
     void editStudent_updateStudent_studentUpdated() {
-        underTest.addStudent(student);
-        Student updStudent = new Student(1L, "Harry Potter", 10);
+//        underTest.addStudent(student);
+        Student updStudent = new Student(1L, "Griffindor",13);
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(updStudent));
+        when(studentRepository.save(updStudent)).thenReturn(updStudent);
         Student updStudentCheck = underTest.editStudent(updStudent);
         assertEquals(updStudent, updStudentCheck);
     }
 
     @Test
-    void editStudent_repeatedUpdatedStudent_ThrowException() {
-        underTest.addStudent(student);
-        Student updStudent = new Student(2L, "Harry", 10);
+    void editStudent_repeatedUpdatedStudent_throwException() {
+        when(studentRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(StudentException.class,
-                () -> underTest.editStudent(updStudent));
+                () -> underTest.editStudent(student));
     }
 
     @Test
     void deleteStudent_repeatedRemovalOfTheStudent_throwException() {
-        underTest.addStudent(student);
-        underTest.deleteStudent(1);
+        when(studentRepository.findById(4L)).thenReturn(Optional.empty());
         assertThrows(StudentException.class,
-                () -> underTest.deleteStudent(1));
+                () -> underTest.deleteStudent(4));
     }
 
     @Test
-    void deleteStudent_idOfStudentForDelete_studentRemoved() {
-        underTest.addStudent(student);
-        Student updStudent = underTest.deleteStudent(1);
+    void deleteStudent_studentToDelete_studentRemoved() {
+        when(studentRepository.findById(4L)).thenReturn(Optional.of(student));
+        doNothing().when(studentRepository).deleteById(4L);
+        Student updStudent = underTest.deleteStudent(4L);
         assertEquals(student, updStudent);
     }
 
     @Test
-    void findStudentWithCertainAge_certainAge_returnListOfStudentsWithCertainAge() {
-        underTest.addStudent(student);
-        assertEquals(List.of(student), underTest.findStudentAge(10));
+    void findStudentWithAge_сertainAge_listOfStudentWithCertainAge() {
+        when(studentRepository.findByAge(10)).thenReturn(List.of(student));
+        assertEquals(List.of(student), underTest.findStudentWithAge(10));
     }
+
 }
