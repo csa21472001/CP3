@@ -1,10 +1,13 @@
 package ru.hogwarts.school.service;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.hogwarts.school.exception.StudentException;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
@@ -14,6 +17,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
     @InjectMocks
@@ -22,8 +26,14 @@ class StudentServiceTest {
     @Mock
     StudentRepository studentRepository;
 
-//    StudentServiceImpl underTest = new StudentServiceImpl(54);
+    //    StudentServiceImpl underTest = new StudentServiceImpl(54);
     Student student = new Student(1L, "Harry", 10);
+    Faculty faculty = new Faculty(4L, "Puffendor", "yellow");
+
+    @BeforeEach
+    void beforeEach() {
+        student.setFaculty(new Faculty(4L, "Puffendor", "yellow"));
+    }
 
     @Test
     void addStudent_newStudent_studentAdded() {
@@ -61,7 +71,7 @@ class StudentServiceTest {
     @Test
     void editStudent_updateStudent_studentUpdated() {
 //        underTest.addStudent(student);
-        Student updStudent = new Student(1L, "Griffindor",13);
+        Student updStudent = new Student(1L, "Griffindor", 13);
         when(studentRepository.findById(1L)).thenReturn(Optional.of(updStudent));
         when(studentRepository.save(updStudent)).thenReturn(updStudent);
         Student updStudentCheck = underTest.editStudent(updStudent);
@@ -95,5 +105,30 @@ class StudentServiceTest {
         when(studentRepository.findByAge(10)).thenReturn(List.of(student));
         assertEquals(List.of(student), underTest.findStudentWithAge(10));
     }
+
+    @Test
+    void findByNameAndAge_wrongNameAndAge_thrownException() {
+        when(studentRepository.findByNameAndAge(student.getName(), student.getAge()))
+                .thenReturn(Optional.empty());
+        assertThrows(StudentException.class,
+                () -> underTest.findByNameAndAge(student.getName(), student.getAge()));
+    }
+
+    @Test
+    void findByNameAndAge_nameAndAge_returnFaculty() {
+        when(studentRepository.findByNameAndAge(student.getName(), student.getAge()))
+                .thenReturn(Optional.of(student));
+        assertEquals(faculty, underTest.findByNameAndAge(student.getName(), student.getAge()));
+    }
+
+    @Test
+    void findByAgeBetween_minAndMax_returnListOfStudents() {
+        int min = 10;
+        int max = 15;
+        when(studentRepository.findByAgeBetween(min, max))
+                .thenReturn(List.of(student));
+        assertEquals(List.of(student), underTest.findByAgeBetween(min, max));
+    }
+
 
 }

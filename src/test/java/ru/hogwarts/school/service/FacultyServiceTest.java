@@ -1,5 +1,6 @@
 package ru.hogwarts.school.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -7,7 +8,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.hogwarts.school.exception.FacultyException;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
+import ru.hogwarts.school.repository.StudentRepository;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +25,15 @@ class FacultyServiceTest {
     FacultyServiceImpl underTest;
     @Mock
     FacultyRepository facultyRepository;
+    @Mock
+    StudentRepository studentRepository;
     Faculty faculty = new Faculty(4L, "Puffendor", "yellow");
+    Student student = new Student(1L, "Harry", 10);
+
+    @BeforeEach
+    void beforeEach() {
+        student.setFaculty(faculty);
+    }
 
     @Test
     void addFaculty_newFaculty_facultyAdded() {
@@ -30,7 +42,6 @@ class FacultyServiceTest {
         when(facultyRepository.save(faculty)).thenReturn(faculty);
         Faculty facultyCheck = underTest.addFaculty(faculty);
         assertEquals(faculty, facultyCheck);
-//        assertTrue(underTest.getAll().contains(faculty));
     }
 
     @Test
@@ -90,8 +101,41 @@ class FacultyServiceTest {
 
     @Test
     void findFacultyWithColor_сertainColor_listOfFacultyWithCertainColor() {
-        when(facultyRepository.findByColor("yellow")).thenReturn(List.of(faculty));
-        assertEquals(List.of(faculty), underTest.findFacultyWithColor("yellow"));
+        when(facultyRepository.findByColor(faculty.getColor())).thenReturn(Optional.of(faculty));
+        assertEquals(Optional.of(faculty), underTest.findFacultyWithColor(faculty.getColor()));
+    }
+
+    @Test
+    void findStudentsByFcltId_wrongId_throwException() {
+        when(facultyRepository.findById(2L)).thenReturn(Optional.empty());
+        assertThrows(FacultyException.class,
+                () -> underTest.findStudentsByFcltId(2L));
+    }
+
+    @Test
+    void findStudentsByFcltId_facultyId_listOfStudents() {
+//        when(facultyRepository.findById(1L)).thenReturn(Optional.empty());
+        when(studentRepository.findByFaculty_id(faculty.getId())).thenReturn(List.of(student));
+        assertEquals(List.of(student), underTest.findStudentsByFcltId(faculty.getId()));
+    }
+
+    @Test
+    void findFacultyByString_stringWithName_returnFaculty() {
+        when(facultyRepository.findByName(faculty.getName())).thenReturn(Optional.of(faculty));
+        assertEquals(Optional.of(faculty), underTest.findFacultyByString(faculty.getName()));
+    }
+
+    @Test
+    void findFacultyByString_stringWithColor_returnFaculty() {
+        when(facultyRepository.findByColor(faculty.getColor())).thenReturn(Optional.of(faculty));
+        assertEquals(Optional.of(faculty), underTest.findFacultyByString(faculty.getColor()));
+    }
+
+    @Test
+    void findFacultyByString_wrongStringWithColor_throwException() {
+        when(facultyRepository.findByColor(faculty.getColor())).thenReturn(Optional.empty());
+        assertThrows(FacultyException.class,
+                () -> underTest.findFacultyByString(faculty.getColor()));
     }
 
 }

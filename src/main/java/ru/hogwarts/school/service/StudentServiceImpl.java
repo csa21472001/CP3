@@ -88,21 +88,18 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.findByAge(age);
     }
 
-//    @Override
-//    public Faculty findByNameAndAge(String name, int age) {
-//
-//        if (studentRepository.findByNameAndAge(name, age).isEmpty()) {
-//            throw new StudentException("Ошибка операции!" +
-//                    "(не найден) ");
-//        }
-//        return studentRepository.findByNameAndAge(name, age).get().getFaculty();
-//    }
-//
+    @Override
+    public Faculty findByNameAndAge(String name, int age) {
 
-//    @Override
-//    public List<Student> getAll() {
-//        return studentRepository.findAll();
-//    }
-//
+        if (studentRepository.findByNameAndAge(name, age).isEmpty()) {
+            throw new StudentException("Ошибка операции!" +
+                    "(не найден) ");
+        }
+        return  studentRepository.findByNameAndAge(name, age).get().getFaculty();
+    }
+    @Override
+    public List<Student> findByAgeBetween(int min, int max) {
+        return studentRepository.findByAgeBetween(min, max);
+    }
 
 }
