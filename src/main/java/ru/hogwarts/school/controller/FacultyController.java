@@ -12,7 +12,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("faculty")
 public class FacultyController {
-
     private final FacultyService facultyService;
 
     public FacultyController(FacultyService facultyService) {
@@ -43,6 +42,7 @@ public class FacultyController {
     public Optional<Faculty> findFacultyWithColor(@PathVariable String color) {
         return facultyService.findFacultyWithColor(color);
     }
+
     @GetMapping("/studentsById/{id}")
     public List<Student> findStudentsByFcltId(@PathVariable long id) {
         return facultyService.findStudentsByFcltId(id);
