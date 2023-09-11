@@ -91,30 +91,15 @@ public class FacultyServiceImpl implements FacultyService {
         return studentRepository.findByFaculty_id(id);
     }
     @Override
-    public Optional<Faculty> findFacultyByString(String nameOrColor) {
-        String correctRegisterName = capitalizeFirstLetter(nameOrColor);
-        String correctRegisterColor = decapitalizeFirstLetter(nameOrColor);
+    public List<Faculty> findFacultyByString(String color, String name) {
 
-        Optional<Faculty> facultyByName = facultyRepository.findByName(correctRegisterName);
-        Optional<Faculty> facultyByColor = facultyRepository.findByColor(correctRegisterColor);
-
-        if (facultyByName.isPresent() && nameOrColor.equalsIgnoreCase(facultyByName.get().getName())) {
-            return facultyByName;
-        } else if (facultyByColor.isPresent() && nameOrColor.equalsIgnoreCase(facultyByColor.get().getColor())) {
-            return facultyByColor;
-        } else {
-            throw new FacultyException("Ошибка операции! (не найден) ");
+        if (facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(color, name).isEmpty()) {
+            throw new FacultyException("Ошибка операции!" +
+                    " (не найден факультет с таким айди)");
         }
-    }
-    public static String capitalizeFirstLetter(String nameOrColor) {
-        String firstLetter = nameOrColor.substring(0, 1).toUpperCase();
-        String restOfString = nameOrColor.substring(1);
-        return firstLetter + restOfString;
-    }
-    public static String decapitalizeFirstLetter(String nameOrColor) {
-        String firstLetter = nameOrColor.substring(0, 1).toLowerCase();
-        String restOfString = nameOrColor.substring(1);
-        return firstLetter + restOfString;
+
+        return facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(color, name);
+
     }
 
     @Override

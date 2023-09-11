@@ -12,7 +12,7 @@ public interface FacultyService {
     Faculty deleteFaculty(long id);
     Optional<Faculty> findFacultyWithColor(String color);
     List<Student> findStudentsByFcltId(long id);
-    Optional<Faculty> findFacultyByString(String nameOrColor);
+    List<Faculty> findFacultyByString(String color, String name);
     List<Faculty> getAll();
 
 }

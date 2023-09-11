@@ -1,20 +1,16 @@
 package ru.hogwarts.school.service;
-
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.StudentException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
-
 import java.util.List;
 import java.util.Optional;
 
 
 @Service
 public class StudentServiceImpl implements StudentService {
-//    private final Map<Long, Student> mapOfStudents = new HashMap<>();
-//    private long id;
 
     private final StudentRepository studentRepository;
     private final FacultyRepository facultyRepository;

@@ -43,14 +43,14 @@ public class FacultyController {
     public Optional<Faculty> findFacultyWithColor(@PathVariable String color) {
         return facultyService.findFacultyWithColor(color);
     }
-    @GetMapping("/id/{id}")
+    @GetMapping("/studentsById/{id}")
     public List<Student> findStudentsByFcltId(@PathVariable long id) {
         return facultyService.findStudentsByFcltId(id);
     }
 
-    @GetMapping("/nameOrColor/{nameOrColor}")
-    public Optional<Faculty> findFacultyByString(@PathVariable String nameOrColor) {
-        return facultyService.findFacultyByString(nameOrColor);
+    @GetMapping("/nameAndColor/{color}/{name}")
+    public List<Faculty> findFacultyByString(@PathVariable String color, @PathVariable String name) {
+        return facultyService.findFacultyByString(color, name);
     }
 
     @GetMapping("/all")
