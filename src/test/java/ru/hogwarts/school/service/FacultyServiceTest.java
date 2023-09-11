@@ -12,6 +12,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -114,28 +115,19 @@ class FacultyServiceTest {
 
     @Test
     void findStudentsByFcltId_facultyId_listOfStudents() {
-//        when(facultyRepository.findById(1L)).thenReturn(Optional.empty());
+        when(facultyRepository.findById(faculty.getId())).thenReturn(Optional.of(faculty));
         when(studentRepository.findByFaculty_id(faculty.getId())).thenReturn(List.of(student));
         assertEquals(List.of(student), underTest.findStudentsByFcltId(faculty.getId()));
     }
-
     @Test
-    void findFacultyByString_stringWithName_returnFaculty() {
-        when(facultyRepository.findByName(faculty.getName())).thenReturn(Optional.of(faculty));
-        assertEquals(Optional.of(faculty), underTest.findFacultyByString(faculty.getName()));
+    void findFacultyByString_colorAndName_returnFaculty() {
+        when(facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(faculty.getColor(),faculty.getName())).thenReturn(List.of(faculty));
+        assertEquals(List.of(faculty), underTest.findFacultyByString(faculty.getColor(),faculty.getName()));
     }
-
     @Test
-    void findFacultyByString_stringWithColor_returnFaculty() {
-        when(facultyRepository.findByColor(faculty.getColor())).thenReturn(Optional.of(faculty));
-        assertEquals(Optional.of(faculty), underTest.findFacultyByString(faculty.getColor()));
-    }
-
-    @Test
-    void findFacultyByString_wrongStringWithColor_throwException() {
-        when(facultyRepository.findByColor(faculty.getColor())).thenReturn(Optional.empty());
+    void findFacultyByString_wrongColorOrName_throwException() {
+        when(facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(faculty.getColor(),faculty.getName())).thenReturn(Collections.emptyList());
         assertThrows(FacultyException.class,
-                () -> underTest.findFacultyByString(faculty.getColor()));
+                () -> underTest.findFacultyByString(faculty.getColor(),faculty.getName()));
     }
-
 }
