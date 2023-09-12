@@ -7,11 +7,11 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("faculty")
 public class FacultyController {
-
     private final FacultyService facultyService;
 
     public FacultyController(FacultyService facultyService) {
@@ -39,15 +39,22 @@ public class FacultyController {
     }
 
     @GetMapping("/color/{color}")
-    public List<Faculty> findFacultyWithColor(@PathVariable String color) {
+    public Optional<Faculty> findFacultyWithColor(@PathVariable String color) {
         return facultyService.findFacultyWithColor(color);
     }
-//    @GetMapping("/id/{id}")
-//    public List<Student> findById(@PathVariable long id) {
-//        return facultyService.findById(id);
-//    }
-//    @GetMapping("/all")
-//    public List<Faculty> getThemAll() {
-//        return facultyService.getAll();
-//    }
+
+    @GetMapping("/studentsById/{id}")
+    public List<Student> findStudentsByFcltId(@PathVariable long id) {
+        return facultyService.findStudentsByFcltId(id);
+    }
+
+    @GetMapping("/nameAndColor/{color}/{name}")
+    public List<Faculty> findFacultyByString(@PathVariable String color, @PathVariable String name) {
+        return facultyService.findFacultyByString(color, name);
+    }
+
+    @GetMapping("/all")
+    public List<Faculty> getThemAll() {
+        return facultyService.getAll();
+    }
 }

@@ -1,20 +1,16 @@
 package ru.hogwarts.school.service;
-
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.StudentException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
-
 import java.util.List;
 import java.util.Optional;
 
 
 @Service
 public class StudentServiceImpl implements StudentService {
-//    private final Map<Long, Student> mapOfStudents = new HashMap<>();
-//    private long id;
 
     private final StudentRepository studentRepository;
     private final FacultyRepository facultyRepository;
@@ -88,21 +84,18 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.findByAge(age);
     }
 
-//    @Override
-//    public Faculty findByNameAndAge(String name, int age) {
-//
-//        if (studentRepository.findByNameAndAge(name, age).isEmpty()) {
-//            throw new StudentException("Ошибка операции!" +
-//                    "(не найден) ");
-//        }
-//        return studentRepository.findByNameAndAge(name, age).get().getFaculty();
-//    }
-//
+    @Override
+    public Faculty findByNameAndAge(String name, int age) {
 
-//    @Override
-//    public List<Student> getAll() {
-//        return studentRepository.findAll();
-//    }
-//
+        if (studentRepository.findByNameAndAge(name, age).isEmpty()) {
+            throw new StudentException("Ошибка операции!" +
+                    "(не найден) ");
+        }
+        return  studentRepository.findByNameAndAge(name, age).get().getFaculty();
+    }
+    @Override
+    public List<Student> findByAgeBetween(int min, int max) {
+        return studentRepository.findByAgeBetween(min, max);
+    }
 
 }

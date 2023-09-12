@@ -11,10 +11,11 @@ import ru.hogwarts.school.exception.StudentException;
 @ControllerAdvice
 public class ControllerExceptionHandler {
     @ExceptionHandler({StudentException.class,FacultyException.class})
-    public ResponseEntity<String> handleStudentException(StudentException ex) {
+    public ResponseEntity<String> handleStudentException(RuntimeException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ex.getMessage());
     }
+
 
 }
