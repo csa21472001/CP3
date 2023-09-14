@@ -17,4 +17,5 @@ public interface StudentService {
     Faculty findByNameAndAge(String name, int age);
 
     List<Student> findByAgeBetween(int min, int max);
+    List<Student> findAll();
 }

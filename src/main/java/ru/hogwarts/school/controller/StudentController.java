@@ -47,10 +47,15 @@ public class StudentController {
             , @PathVariable int age) {
         return studentService.findByNameAndAge(name, age);
     }
-    @GetMapping("/all/{min}/{max}")
+    @GetMapping("/allAgedBetween")
     public List<Student> findByAgeBetween(@RequestParam int min
             , @RequestParam int max) {
         return studentService.findByAgeBetween(min, max);
+    }
+
+    @GetMapping("/getAll")
+    public List<Student> findAll() {
+        return studentService.findAll();
     }
 
 }
