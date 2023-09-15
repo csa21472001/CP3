@@ -59,6 +59,8 @@ public class AvatarServiceImpl implements AvatarService {
                 .orElseThrow(() -> new AvatarNotFoundException("Тhe avatar is missing"));
     }
 
+
+
 //    private String getExtensions(String fileName) {
 //        return fileName.substring(fileName.lastIndexOf("."));
 //    }
