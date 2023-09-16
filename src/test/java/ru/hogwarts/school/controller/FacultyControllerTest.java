@@ -1,16 +1,16 @@
 package ru.hogwarts.school.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
+
 import org.junit.jupiter.api.Test;
-import org.mockito.stubbing.OngoingStubbing;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.hogwarts.school.exception.FacultyException;
+
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
@@ -19,7 +19,6 @@ import ru.hogwarts.school.service.FacultyServiceImpl;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -92,8 +91,8 @@ public class FacultyControllerTest {
     }
     @Test
     void editFaculty__status200AndEditedAtDB() throws Exception {
-        when(facultyRepository.save(faculty)).thenReturn(faculty);
-        when(facultyRepository.findById(faculty.getId())).thenReturn(Optional.of(faculty));
+        when(facultyRepository.save(faculty1)).thenReturn(faculty1);
+        when(facultyRepository.findById(faculty1.getId())).thenReturn(Optional.of(faculty1));
 
         mockMvc.perform(put ("/faculty")
                         .content(objectMapper.writeValueAsString(faculty1))

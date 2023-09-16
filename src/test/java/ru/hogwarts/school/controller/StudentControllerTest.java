@@ -38,15 +38,11 @@ public class StudentControllerTest {
     FacultyRepository facultyRepository;
     @Autowired
     StudentRepository studentRepository;
-    //    private final String path = "http://localhost:" + port + "/student";
+
     Student harry = new Student(1L, "Harry", 10);
     Student harryJr = new Student(1L, "Harry", 9);
     Student ron = new Student(2L, "Ron", 12);
-//    Student jorik = new Student(3L,"Jorik",47);
-//    Collection<Student> students;
 
-    //    @BeforeEach
-//    void beforeEach() {students = List.of(harry,harryJr, ron, jorik);}
     @AfterEach
     void afterEach() {
         studentRepository.deleteAll();
@@ -88,27 +84,27 @@ public class StudentControllerTest {
 
     @Test
     void editStudent__return200AndStudent() {
-        studentRepository.save(harryJr);
+        Student student = studentRepository.save(harryJr);
         ResponseEntity<Student> studentResponseEntity = restTemplate
                 .exchange("http://localhost:" + port + "/student",
-                        HttpMethod.DELETE,
-                        new HttpEntity<>(harry),
+                        HttpMethod.PUT,
+                        new HttpEntity<>(student),
                         Student.class);
         assertEquals(HttpStatus.OK, studentResponseEntity.getStatusCode());
-        assertEquals(harry.getName(), studentResponseEntity.getBody().getName());
-        assertEquals(harry.getAge(), studentResponseEntity.getBody().getAge());
+        assertEquals(student.getName(), studentResponseEntity.getBody().getName());
+        assertEquals(student.getAge(), studentResponseEntity.getBody().getAge());
     }
 
     @Test
     void deleteStudent__return200AndStudent() {
-        studentRepository.save(harry);
+        Student student = studentRepository.save(harry);
         ResponseEntity<Student> studentResponseEntity = restTemplate
-                .exchange("http://localhost:" + port + "/student",
-                        HttpMethod.PUT,
-                        new HttpEntity<>(harry),
+                .exchange("http://localhost:" + port + "/student/" + student.getId(),
+                        HttpMethod.DELETE,
+                        null,
                         Student.class);
         assertEquals(HttpStatus.OK, studentResponseEntity.getStatusCode());
-        assertEquals(harry.getAge(), studentResponseEntity.getBody().getAge());
+        assertEquals(student.getAge(), studentResponseEntity.getBody().getAge());
     }
 
     @Test
