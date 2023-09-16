@@ -46,12 +46,10 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public Faculty editFaculty(Faculty faculty) {
-
         if (facultyRepository.findById(faculty.getId()).isEmpty()) {
             throw new FacultyException("Ошибка операции!" +
                     " (не найден факультет с таким айди)");
         }
-
         return facultyRepository.save(faculty);
     }
     @Override
