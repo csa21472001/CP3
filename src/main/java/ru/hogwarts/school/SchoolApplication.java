@@ -13,12 +13,8 @@ import java.nio.charset.StandardCharsets;
 @SpringBootApplication
 @OpenAPIDefinition
 public class SchoolApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(SchoolApplication.class, args);
 	}
-	@Bean
-	public HttpMessageConverter<String> responseBodyConverter() {
-		return new StringHttpMessageConverter(StandardCharsets.UTF_8);
-	}
+
 }

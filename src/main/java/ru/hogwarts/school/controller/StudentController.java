@@ -47,9 +47,23 @@ public class StudentController {
             , @RequestParam int max) {
         return studentService.findByAgeBetween(min, max);
     }
+    @GetMapping("/studentsCount")
+    public Integer findStudentCount(){
+        return studentService.findStudentCount();
+    };
+    @GetMapping("/avgAge")
+    public Integer findAvgAge(){
+        return studentService.findAvgAge();
+    };
+    @GetMapping("/lastFive")
+    public List<Student> findLastStudents(){
+        return studentService.findLastStudents();
+    };
+
 //    @GetMapping("/faculty/{name}/{age}")
 //    public Faculty getFacultyByNameAndAge(@PathVariable String name
 //            , @PathVariable int age) {
 //        return studentService.findByNameAndAge(name, age);
 //    }
+
 }

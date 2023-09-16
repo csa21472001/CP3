@@ -3,6 +3,8 @@ package ru.hogwarts.school.service;
 import nonapi.io.github.classgraph.utils.FileUtils;
 import org.junit.jupiter.api.Test;
 
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.exception.AvatarNotFoundException;
@@ -13,6 +15,7 @@ import ru.hogwarts.school.repository.AvatarRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,6 +23,7 @@ import static org.mockito.Mockito.*;
 
 class AvatarServiceTest {
     StudentService studentService = mock(StudentService.class);
+//    AvatarService avatarService = mock(AvatarService.class);
     AvatarRepository avatarRepository = mock(AvatarRepository.class);
     String avatarsDir = "./src/test/resourses/avatar";
     AvatarService underTest = new AvatarServiceImpl(studentService, avatarRepository, avatarsDir);
@@ -40,16 +44,23 @@ class AvatarServiceTest {
         assertTrue(FileUtils.canRead(new File(avatarsDir + "/"
                 + student.getName() + ".avatar")));
     }
-
     @Test
     void readFromDB_correctId_returnAvatar() {
         when(avatarRepository.findById(1L)).thenReturn(Optional.of(avatar));
         assertEquals(avatar, underTest.readFromDB(1L));
     }
-
     @Test
     void readFromDB_invalidId_throwException() {
         when(avatarRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(AvatarNotFoundException.class, () -> underTest.readFromDB(1L));
+    }
+
+    @Test
+    void getPage_sizeOfPageAndNumberOfPages_returnListOfAvatar() {
+        Avatar avatar = new Avatar();
+        when(avatarRepository.findAll((PageRequest)any())).thenReturn(new PageImpl<>(List.of(avatar)));
+
+        List<Avatar> result = underTest.getPage(1,0);
+        assertEquals(List.of(avatar), result);
     }
 }

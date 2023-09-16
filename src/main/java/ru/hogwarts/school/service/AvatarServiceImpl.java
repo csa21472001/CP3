@@ -1,6 +1,7 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.exception.AvatarNotFoundException;
@@ -11,6 +12,7 @@ import ru.hogwarts.school.repository.AvatarRepository;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -19,7 +21,6 @@ public class AvatarServiceImpl implements AvatarService {
     private final String avatarsDir;
     private final StudentService studentService;
     private final AvatarRepository avatarRepository;
-
     public AvatarServiceImpl(StudentService studentService
             , AvatarRepository avatarRepository
             , @Value("${path.to.avatars.folder}") String avatarsDir) {
@@ -27,7 +28,6 @@ public class AvatarServiceImpl implements AvatarService {
         this.studentService = studentService;
         this.avatarRepository = avatarRepository;
     }
-
     @Override
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
         Student student = studentService.findStudent(studentId);
@@ -42,25 +42,25 @@ public class AvatarServiceImpl implements AvatarService {
         ) {
             bis.transferTo(bos);
         }
-
         Avatar avatar = avatarRepository.findByStudent_id(studentId).orElse(new Avatar());
         avatar.setStudent(student);
         avatar.setFilePath(filePath.toString());
         avatar.setFileSize(avatarFile.getSize());
         avatar.setMediaType(avatarFile.getContentType());
         avatar.setData(avatarFile.getBytes());
-
         avatarRepository.save(avatar);
     }
-
     @Override
     public Avatar readFromDB(long id) {
         return avatarRepository.findById(id)
                 .orElseThrow(() -> new AvatarNotFoundException("Тhe avatar is missing"));
     }
 
-
-
+    @Override
+    public List<Avatar> getPage(int size, int pageNumb) {
+        PageRequest page = PageRequest.of (pageNumb, size);
+        return avatarRepository.findAll(page).getContent();
+    }
 //    private String getExtensions(String fileName) {
 //        return fileName.substring(fileName.lastIndexOf("."));
 //    }
