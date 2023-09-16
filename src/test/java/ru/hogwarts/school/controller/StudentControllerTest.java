@@ -17,6 +17,7 @@ import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.FacultyService;
 import ru.hogwarts.school.service.StudentService;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,7 +64,7 @@ public class StudentControllerTest {
     void findStudent__returnStatus400AndStudent() {
         ResponseEntity<String> studentResponseEntity = restTemplate
                 .getForEntity("http://localhost:" + port + "/student/" + harry.getId()
-                        ,String.class );
+                        , String.class);
         assertEquals(HttpStatus.BAD_REQUEST, studentResponseEntity.getStatusCode());
         assertEquals("Ошибка операции!" + "(не найден)", studentResponseEntity.getBody());
     }
