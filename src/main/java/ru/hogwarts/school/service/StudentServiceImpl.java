@@ -35,6 +35,7 @@ public class StudentServiceImpl implements StudentService {
         Student savedStudent = studentRepository.save(student);
 
         logger.info("Из метод addStudent вернули" +  studentRepository.save(student));
+
         return savedStudent ;
     }
 

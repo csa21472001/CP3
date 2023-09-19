@@ -35,7 +35,8 @@ public class AvatarServiceImpl implements AvatarService {
     @Override
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
 
-        logger.info( "Был вызван метод uploadAvatar с данными - id студента" + studentId);
+        logger.info( "Был вызван метод uploadAvatar с данными - id студента" + studentId
+                + ". Данные аватара " + avatarFile.getOriginalFilename() + " " + avatarFile.getSize() );
 
         Student student = studentService.findStudent(studentId);
         Path filePath = Path.of(avatarsDir, student.getName() + ".avatar");
@@ -62,21 +63,23 @@ public class AvatarServiceImpl implements AvatarService {
     }
     @Override
     public Avatar readFromDB(long id) {
-        Optional<Avatar> avatar = avatarRepository.findById(id);
-
-        logger.info( "Был вызван метод readFromDB с данными - id аватарки " + id + ". Метод вернул аватар студента " + avatar.get().getStudent().getName() + " или сообщение об ошибке.");
-        return avatarRepository.findById(id)
+            logger.info( "Был вызван метод readFromDB с данными - id аватарки " + id);
+            Optional<Avatar> avatar = avatarRepository.findById(id);
+            logger.info(". Метод вернул аватар студента " + avatar.get().getStudent().getName() + " или сообщение об ошибке.");
+        return avatar
                 .orElseThrow(() -> new AvatarNotFoundException("Тhe avatar is missing"));
     }
     @Override
     public List<Avatar> getPage(int size, int pageNumb) {
-        PageRequest page = PageRequest.of (pageNumb, size);
+        logger.info( "Был вызван метод getPage с количеством элементов на странице " + size + " и номером страницы " + pageNumb);
+        PageRequest page = PageRequest.of(pageNumb, size);
         List<Avatar> avatars = avatarRepository.findAll(page).getContent();
-        logger.info( "Был вызван метод getPage с количеством элементов на странице " + size + ". Метод вернул список аватаров" + avatars + " или сообщение об ошибке.");
-        return avatarRepository.findAll(page).getContent();
+        logger.info("Метод вернул список аватаров " + avatars);
+        return avatars;
     }
+
 //    private String getExtensions(String fileName) {
 //        return fileName.substring(fileName.lastIndexOf("."));
 //    }
-
 }
+
