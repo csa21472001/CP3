@@ -56,18 +56,20 @@ public class AvatarServiceImpl implements AvatarService {
         avatar.setFileSize(avatarFile.getSize());
         avatar.setMediaType(avatarFile.getContentType());
         avatar.setData(avatarFile.getBytes());
-
-        logger.info("Метод uploadAvatar и сохранен в БД аватар студента " + avatar.getStudent().getName());
-
         avatarRepository.save(avatar);
+        logger.info("Метод uploadAvatar сохраняет в БД аватар студента " + avatar);
     }
     @Override
     public Avatar readFromDB(long id) {
-            logger.info( "Был вызван метод readFromDB с данными - id аватарки " + id);
-            Optional<Avatar> avatar = avatarRepository.findById(id);
-            logger.info(". Метод вернул аватар студента " + avatar.get().getStudent().getName() + " или сообщение об ошибке.");
-        return avatar
-                .orElseThrow(() -> new AvatarNotFoundException("Тhe avatar is missing"));
+        logger.info( "Был вызван метод readFromDB с данными - id аватарки " + id);
+
+        Optional<Avatar> avatar = avatarRepository.findById(id);
+
+        Avatar avatarEntity = avatar.orElseThrow(() -> new AvatarNotFoundException("Тhe avatar is missing"));
+
+                logger.info("Метод вернул аватар студента " +  avatarEntity);
+
+        return  avatarEntity;
     }
     @Override
     public List<Avatar> getPage(int size, int pageNumb) {
