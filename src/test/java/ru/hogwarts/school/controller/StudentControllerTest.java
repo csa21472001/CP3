@@ -17,6 +17,7 @@ import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.FacultyService;
 import ru.hogwarts.school.service.StudentService;
+
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
