@@ -15,4 +15,5 @@ public interface FacultyService {
     List<Faculty> findFacultyByString(String color, String name);
     List<Faculty> findAll();
 
+//    String findLongestFcltName();
 }

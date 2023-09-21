@@ -135,7 +135,6 @@ class StudentServiceTest {
         assertEquals(13,underTest.findAvgAge());
     }
 
-
     //    @Test
 //    void findByNameAndAge_wrongNameAndAge_thrownException() {
 //        when(studentRepository.findByNameAndAge(student.getName(), student.getAge()))
