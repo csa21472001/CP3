@@ -13,6 +13,6 @@ public interface FacultyService {
     Optional<Faculty> findFacultyWithColor(String color);
     List<Student> findStudentsByFcltId(long id);
     List<Faculty> findFacultyByString(String color, String name);
-    List<Faculty> getAll();
+    List<Faculty> findAll();
 
 }

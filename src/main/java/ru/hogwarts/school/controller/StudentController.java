@@ -17,45 +17,53 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping("/{id}")
-    public Student getStudentInfo(@PathVariable Long id) {
-        return studentService.findStudent(id);
-    }
-
     @PostMapping
     public Student addStudent(@RequestBody Student student) {
-        return studentService.addStudent(student);
-    }
+        return studentService.addStudent(student);}
+
+    @GetMapping("/{id}")
+    public Student findStudent(@PathVariable Long id) {
+        return studentService.findStudent(id);}
 
     @PutMapping
     public Student editStudent(@RequestBody Student student) {
-        return studentService.editStudent(student);
-    }
+        return studentService.editStudent(student);}
 
     @DeleteMapping("/{id}")
     public Student deleteStudent(@PathVariable Long id) {
-        return studentService.deleteStudent(id);
+        return studentService.deleteStudent(id);}
 
-    }
     @GetMapping("/age/{age}")
     public List<Student> findStudentAge(@PathVariable int age) {
-        return studentService.findStudentWithAge(age);
-    }
-
-    @GetMapping("/faculty/{name}/{age}")
-    public Faculty getFacultyByNameAndAge(@PathVariable String name
-            , @PathVariable int age) {
-        return studentService.findByNameAndAge(name, age);
-    }
-    @GetMapping("/allAgedBetween")
-    public List<Student> findByAgeBetween(@RequestParam int min
-            , @RequestParam int max) {
-        return studentService.findByAgeBetween(min, max);
-    }
+        return studentService.findStudentWithAge(age);}
 
     @GetMapping("/getAll")
     public List<Student> findAll() {
         return studentService.findAll();
     }
+
+    @GetMapping("/allAgedBetween")
+    public List<Student> findByAgeBetween(@RequestParam int min
+            , @RequestParam int max) {
+        return studentService.findByAgeBetween(min, max);
+    }
+    @GetMapping("/studentsCount")
+    public Integer findStudentCount(){
+        return studentService.findStudentCount();
+    };
+    @GetMapping("/avgAge")
+    public Integer findAvgAge(){
+        return studentService.findAvgAge();
+    };
+    @GetMapping("/lastFive")
+    public List<Student> findLastStudents(){
+        return studentService.findLastStudents();
+    };
+
+//    @GetMapping("/faculty/{name}/{age}")
+//    public Faculty getFacultyByNameAndAge(@PathVariable String name
+//            , @PathVariable int age) {
+//        return studentService.findByNameAndAge(name, age);
+//    }
 
 }

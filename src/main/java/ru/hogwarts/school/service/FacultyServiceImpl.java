@@ -10,8 +10,7 @@ import java.util.Optional;
 
 @Service
 public class FacultyServiceImpl implements FacultyService {
-//    private final Map<Long, Faculty> mapOfFacultys = new HashMap<>();
-//    private long id;
+
     private final FacultyRepository facultyRepository;
     private final StudentRepository studentRepository;
 
@@ -24,23 +23,18 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public Faculty addFaculty(Faculty faculty) {
-//        if (mapOfFacultys.containsValue(faculty)) {
-//        }
+
         if (facultyRepository.findByNameAndColor(faculty.getName(), faculty.getColor()).isPresent()) {
             throw new FacultyException("Ошибка операции!" +
                     " (добавлен ранее)");
         }
-//        faculty.setId(++id);
-//        mapOfFacultys.put(faculty.getId(), faculty);
 
         return facultyRepository.save(faculty) ;
     }
 
     @Override
     public Faculty findFaculty(long id) {
-//        if (!mapOfFacultys.containsKey(id)) {
-//
-//        }
+
         Optional<Faculty> faculty = facultyRepository.findById(id);
 
         if (faculty.isEmpty()) {
@@ -52,22 +46,15 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public Faculty editFaculty(Faculty faculty) {
-//        if (!mapOfFacultys.containsKey(faculty.getId())) {
-//
-//        }
         if (facultyRepository.findById(faculty.getId()).isEmpty()) {
             throw new FacultyException("Ошибка операции!" +
                     " (не найден факультет с таким айди)");
         }
-//        mapOfFacultys.put(faculty.getId(), faculty);
         return facultyRepository.save(faculty);
     }
     @Override
     public Faculty deleteFaculty(long id) {
-//        Faculty faculty = mapOfFacultys.remove(id);
-//        if (faculty == null) {
-//
-//        }
+
         Optional<Faculty> faculty = facultyRepository.findById(id);
 
         if (faculty.isEmpty()) {
@@ -103,7 +90,7 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public List<Faculty> getAll() {
+    public List<Faculty> findAll() {
         return facultyRepository.findAll();
     }
 

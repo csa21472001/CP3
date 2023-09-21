@@ -28,10 +28,14 @@ class StudentServiceTest {
 
     //    StudentServiceImpl underTest = new StudentServiceImpl(54);
     Student student = new Student(1L, "Harry", 10);
+    Student student1 = new Student(2L, "Ron", 12);
+    Student student2 = new Student(3L, "Germiona", 11);
     Faculty faculty = new Faculty(4L, "Puffendor", "yellow");
+
 
     @BeforeEach
     void beforeEach() {
+        studentRepository.deleteAll();
         student.setFaculty(new Faculty(4L, "Puffendor", "yellow"));
     }
 
@@ -105,22 +109,6 @@ class StudentServiceTest {
         when(studentRepository.findByAge(10)).thenReturn(List.of(student));
         assertEquals(List.of(student), underTest.findStudentWithAge(10));
     }
-
-    @Test
-    void findByNameAndAge_wrongNameAndAge_thrownException() {
-        when(studentRepository.findByNameAndAge(student.getName(), student.getAge()))
-                .thenReturn(Optional.empty());
-        assertThrows(StudentException.class,
-                () -> underTest.findByNameAndAge(student.getName(), student.getAge()));
-    }
-
-    @Test
-    void findByNameAndAge_nameAndAge_returnFaculty() {
-        when(studentRepository.findByNameAndAge(student.getName(), student.getAge()))
-                .thenReturn(Optional.of(student));
-        assertEquals(faculty, underTest.findByNameAndAge(student.getName(), student.getAge()));
-    }
-
     @Test
     void findByAgeBetween_minAndMax_returnListOfStudents() {
         int min = 10;
@@ -130,5 +118,36 @@ class StudentServiceTest {
         assertEquals(List.of(student), underTest.findByAgeBetween(min, max));
     }
 
+    @Test
+    void findStudentCount__returnNumberOffAllStudents() {
+        when(studentRepository.findStudentCount()).thenReturn(3);
+        assertEquals(3,underTest.findStudentCount());
+    }
+    @Test
+    void findLastStudents__returnFiveStudentsWithHighestId() {
+        when(studentRepository.findLastStudents(3))
+                .thenReturn(List.of(student2,student1,student));
+        assertEquals(List.of(student2,student1,student),underTest.findLastStudents());
+    }
+    @Test
+    void findAvgAge__returnAvgAgeOfAllStudents() {
+        when(studentRepository.findAvgAge()).thenReturn(13);
+        assertEquals(13,underTest.findAvgAge());
+    }
 
+
+    //    @Test
+//    void findByNameAndAge_wrongNameAndAge_thrownException() {
+//        when(studentRepository.findByNameAndAge(student.getName(), student.getAge()))
+//                .thenReturn(Optional.empty());
+//        assertThrows(StudentException.class,
+//                () -> underTest.findByNameAndAge(student.getName(), student.getAge()));
+//    }
+
+//    @Test
+//    void findByNameAndAge_nameAndAge_returnFaculty() {
+//        when(studentRepository.findByNameAndAge(student.getName(), student.getAge()))
+//                .thenReturn(Optional.of(student));
+//        assertEquals(faculty, underTest.findByNameAndAge(student.getName(), student.getAge()));
+//    }
 }

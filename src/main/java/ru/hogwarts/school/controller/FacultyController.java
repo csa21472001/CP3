@@ -19,7 +19,7 @@ public class FacultyController {
     }
 
     @GetMapping("/{id}")
-    public Faculty getFacultyInfo(@PathVariable Long id) {
+    public Faculty findFaculty(@PathVariable Long id) {
         return facultyService.findFaculty(id);
     }
 
@@ -54,7 +54,7 @@ public class FacultyController {
     }
 
     @GetMapping("/all")
-    public List<Faculty> getThemAll() {
-        return facultyService.getAll();
+    public List<Faculty> findAll() {
+        return facultyService.findAll();
     }
 }
