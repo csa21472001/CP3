@@ -44,11 +44,6 @@ public class FacultyControllerTest {
     Faculty faculty1 = new Faculty(1L, "Puffendor", "yellow");
     Student student = new Student(1L, "Harry Potter", 45);
 
-//    @AfterEach
-//    void afterEach() {
-//        facultyRepository.deleteAll();
-//    }
-
     @Test
     void addFaculty__status200AndSavedToDB() throws Exception {
         when(facultyRepository.save(faculty)).thenReturn(faculty);
@@ -125,7 +120,7 @@ public class FacultyControllerTest {
     void findStudentsById__status200AndReturnListOfStudents() throws Exception {
         when(facultyRepository.findById(faculty.getId())).thenReturn(Optional.of(faculty));
         when(studentRepository.findByFaculty_id(faculty.getId())).thenReturn(List.of(student));
-        ;
+
         mockMvc.perform(get("/faculty/studentsById/" + faculty.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value(student.getName()))
