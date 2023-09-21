@@ -16,13 +16,14 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.FacultyServiceImpl;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = {FacultyController.class})
 public class FacultyControllerTest {
@@ -129,6 +130,20 @@ public class FacultyControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value(faculty.getName()))
                 .andExpect(jsonPath("$[0].color").value(faculty.getColor()));
+    }
+    @Test
+    void findLongestFcltName__returnStringWithLongestName() throws Exception {
+        when(facultyRepository.findAll()).thenReturn(List.of(faculty,faculty1));
+        mockMvc.perform(get("/faculty/findLongestName"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Gryffindor"));
+
+    }
+    @Test
+    void findLongestFcltName__throwException() throws Exception {
+        when(facultyRepository.findAll()).thenReturn(Collections.emptyList());
+        mockMvc.perform(post("/faculty/findLongestName"))
+                .andExpect(status().isBadRequest());
     }
 
 

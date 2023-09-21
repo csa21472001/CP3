@@ -69,8 +69,9 @@ public class AvatarServiceImpl implements AvatarService {
 
                 logger.info("Метод вернул аватар студента " +  avatarEntity);
 
-        return  avatarEntity;
+        return avatarEntity;
     }
+
     @Override
     public List<Avatar> getPage(int size, int pageNumb) {
         logger.info( "Был вызван метод getPage с количеством элементов на странице " + size + " и номером страницы " + pageNumb);
