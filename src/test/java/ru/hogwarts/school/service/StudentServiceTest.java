@@ -1,6 +1,5 @@
 package ru.hogwarts.school.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,14 +24,13 @@ import static org.mockito.Mockito.when;
 class StudentServiceTest {
     @InjectMocks
     StudentServiceImpl underTest;
-
     @Mock
     StudentRepository studentRepository;
 
     //    StudentServiceImpl underTest = new StudentServiceImpl(54);
     Student student = new Student(1L, "aHarry", 10);
-    Student student1 = new Student(2L, "aRon", 12);
-    Student student2 = new Student(3L, "aGermiona", 18);
+    Student student1 = new Student(2L, "aRon", 11);
+    Student student2 = new Student(3L, "aGermiona", 9);
     Faculty faculty = new Faculty(4L, "Puffendor", "yellow");
 
 
@@ -149,9 +147,10 @@ class StudentServiceTest {
         when(studentRepository.findAll()).thenReturn(List.of(student,student1,student2));
         double avgAge1= 12.0d;
         Double avgAge = underTest.findAvgAgeByStream();
-        Assertions.assertThat(avgAge).satisfies(age -> {
-            Assertions.assertThat(age).isBetween( avgAge1, avgAge1 + 1.0);
-        });
+        assertEquals(10,avgAge);
+//        Assertions.assertThat(avgAge).satisfies(age -> {
+//            Assertions.assertThat(age).isBetween( avgAge1, avgAge1 + 1.0);
+//        });
     }
     @Test
     void findAvgAgeByStream__returnZero() {
