@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = {SupportingController.class})
+@WebMvcTest(controllers = {InfoController.class})
 class InfoControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -21,7 +21,7 @@ class InfoControllerTest {
         mockMvc.perform(get("/info/getPort")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.port").value(8081));
+                .andExpect(jsonPath("$").value(8081));
 
     }
 }

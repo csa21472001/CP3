@@ -41,6 +41,7 @@ public class StudentControllerTest {
     Student harry = new Student(1L, "aHarry", 10);
     Student harryJr = new Student(1L, "Harry", 9);
     Student ron = new Student(2L, "aRon", 12);
+    List<Student> studentList = List.of(harry,harryJr,ron);
 
     @AfterEach
     void afterEach() {
@@ -138,6 +139,10 @@ public class StudentControllerTest {
         studentRepository.save(harry);
         studentRepository.save(harryJr);
         studentRepository.save(ron);
+         double sum = studentList.stream()
+                .mapToInt(stu -> stu.getAge())
+                .sum();
+         double avgAge = sum/studentList.size();
 
         ResponseEntity<Double> exchange = restTemplate.exchange(
                 "http://localhost:" + port + "/student/avgAgeByStream",
@@ -145,7 +150,7 @@ public class StudentControllerTest {
                 null,
                 Double.class);
         assertEquals(HttpStatus.OK, exchange.getStatusCode());
-        assertEquals(List.of(harry, ron,harryJr), exchange.getBody());
+        assertEquals(avgAge, exchange.getBody());
     }
  @Test
     void findNameWithFirstLetterIsA__returnSortedNamesStartedWithA() {
@@ -159,7 +164,7 @@ public class StudentControllerTest {
                 new ParameterizedTypeReference<>() {
                 });
         assertEquals(HttpStatus.OK, exchange.getStatusCode());
-        assertEquals(List.of(harry.getName(),ron.getName()), exchange.getBody());
+        assertEquals(List.of(harry.getName().toUpperCase(),ron.getName().toUpperCase()), exchange.getBody());
     }
 
 
