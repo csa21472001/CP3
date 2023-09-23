@@ -19,23 +19,28 @@ public class StudentController {
 
     @PostMapping
     public Student addStudent(@RequestBody Student student) {
-        return studentService.addStudent(student);}
+        return studentService.addStudent(student);
+    }
 
     @GetMapping("/{id}")
     public Student findStudent(@PathVariable Long id) {
-        return studentService.findStudent(id);}
+        return studentService.findStudent(id);
+    }
 
     @PutMapping
     public Student editStudent(@RequestBody Student student) {
-        return studentService.editStudent(student);}
+        return studentService.editStudent(student);
+    }
 
     @DeleteMapping("/{id}")
     public Student deleteStudent(@PathVariable Long id) {
-        return studentService.deleteStudent(id);}
+        return studentService.deleteStudent(id);
+    }
 
     @GetMapping("/age/{age}")
     public List<Student> findStudentAge(@PathVariable int age) {
-        return studentService.findStudentWithAge(age);}
+        return studentService.findStudentWithAge(age);
+    }
 
     @GetMapping("/getAll")
     public List<Student> findAll() {
@@ -47,18 +52,38 @@ public class StudentController {
             , @RequestParam int max) {
         return studentService.findByAgeBetween(min, max);
     }
+
     @GetMapping("/studentsCount")
-    public Integer findStudentCount(){
+    public Integer findStudentCount() {
         return studentService.findStudentCount();
-    };
+    }
+
+    ;
+
     @GetMapping("/avgAge")
-    public Integer findAvgAge(){
+    public Integer findAvgAge() {
         return studentService.findAvgAge();
-    };
+    }
+
+    ;
+
     @GetMapping("/lastFive")
-    public List<Student> findLastStudents(){
+    public List<Student> findLastStudents() {
         return studentService.findLastStudents();
-    };
+    }
+
+    ;
+
+    @GetMapping("/aName")
+    List<String> findNameWithFirstLetterIsA() {
+        return studentService.findNameWithFirstLetterIsA();
+    }
+
+    @GetMapping("/avgAgeByStream")
+    Double findAvgAgeByStream() {
+        return studentService.findAvgAgeByStream();
+    }
+
 
 //    @GetMapping("/faculty/{name}/{age}")
 //    public Faculty getFacultyByNameAndAge(@PathVariable String name

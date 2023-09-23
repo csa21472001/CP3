@@ -137,22 +137,22 @@ public class StudentServiceImpl implements StudentService {
         return students;
     }
 
-//    @Override
-//    public List<String> findNameWithFirstLetterIsA() {
-//        return studentRepository.findAll().stream()
-//                .map(stud -> stud.getName())
-//                .filter(name -> StringUtils.startsWithIgnoreCase(name,"a"))
-//                .map(name -> name.toUpperCase())
-//                .sorted()
-//                .collect(Collectors.toList());
-//    }
-//
-//    @Override
-//    public Double findAvgAgeByStream() {
-//        return studentRepository.findAll().stream()
-//                .mapToInt(student -> student.getAge())
-//                .average()
-//                .orElse(0);
-//    }
+    @Override
+    public List<String> findNameWithFirstLetterIsA() {
+        return studentRepository.findAll().stream()
+                .map(stud -> stud.getName())
+                .filter(name -> StringUtils.startsWithIgnoreCase(name,"a"))
+                .map(name -> name.toUpperCase())
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Double findAvgAgeByStream() {
+        return studentRepository.findAll().stream()
+                .mapToInt(student -> student.getAge())
+                .average()
+                .orElse(0);
+    }
 
 }
