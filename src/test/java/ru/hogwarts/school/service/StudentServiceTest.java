@@ -11,9 +11,11 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -22,14 +24,13 @@ import static org.mockito.Mockito.when;
 class StudentServiceTest {
     @InjectMocks
     StudentServiceImpl underTest;
-
     @Mock
     StudentRepository studentRepository;
 
     //    StudentServiceImpl underTest = new StudentServiceImpl(54);
-    Student student = new Student(1L, "Harry", 10);
-    Student student1 = new Student(2L, "Ron", 12);
-    Student student2 = new Student(3L, "Germiona", 11);
+    Student student = new Student(1L, "aHarry", 10);
+    Student student1 = new Student(2L, "aRon", 11);
+    Student student2 = new Student(3L, "aGermiona", 9);
     Faculty faculty = new Faculty(4L, "Puffendor", "yellow");
 
 
@@ -131,11 +132,35 @@ class StudentServiceTest {
     }
     @Test
     void findAvgAge__returnAvgAgeOfAllStudents() {
-        when(studentRepository.findAvgAge()).thenReturn(13);
-        assertEquals(13,underTest.findAvgAge());
+        when(studentRepository.findAvgAge()).thenReturn(14);
+        assertEquals(14,underTest.findAvgAge());
+    }
+    @Test
+    void findNameWithFirstLetterIsA__returnListOfSortedNames() {
+        when(studentRepository.findAll()).thenReturn(List.of(student,student1,student2));
+        List<String> names = underTest.findNameWithFirstLetterIsA();
+        assertThat(names).contains(student.getName().toUpperCase(),student1.getName().toUpperCase());
+        assertThat(names).isSorted();
+    }
+    @Test
+    void findAvgAgeByStream__returnAvgAgeOfAllStudents() {
+        when(studentRepository.findAll()).thenReturn(List.of(student,student1,student2));
+        double avgAge1= 12.0d;
+        Double avgAge = underTest.findAvgAgeByStream();
+        assertEquals(10,avgAge);
+//        Assertions.assertThat(avgAge).satisfies(age -> {
+//            Assertions.assertThat(age).isBetween( avgAge1, avgAge1 + 1.0);
+//        });
+    }
+    @Test
+    void findAvgAgeByStream__returnZero() {
+        when(studentRepository.findAll()).thenReturn(Collections.emptyList());
+        int orElseValue = 0;
+        assertEquals(orElseValue, underTest.findAvgAgeByStream());
     }
 
-    //    @Test
+
+//        @Test
 //    void findByNameAndAge_wrongNameAndAge_thrownException() {
 //        when(studentRepository.findByNameAndAge(student.getName(), student.getAge()))
 //                .thenReturn(Optional.empty());

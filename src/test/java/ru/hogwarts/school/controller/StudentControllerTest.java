@@ -39,9 +39,9 @@ public class StudentControllerTest {
     @Autowired
     StudentRepository studentRepository;
 
-    Student harry = new Student(1L, "Harry", 10);
+    Student harry = new Student(1L, "aHarry", 10);
     Student harryJr = new Student(1L, "Harry", 9);
-    Student ron = new Student(2L, "Ron", 12);
+    Student ron = new Student(2L, "aRon", 12);
 
     @AfterEach
     void afterEach() {
@@ -134,6 +134,35 @@ public class StudentControllerTest {
         assertEquals(HttpStatus.OK, exchange.getStatusCode());
         assertEquals(List.of(harry, ron), exchange.getBody());
     }
+    @Test
+    void findAvgAgeByStream__returnDoubleAvgAge() {
+        studentRepository.save(harry);
+        studentRepository.save(harryJr);
+        studentRepository.save(ron);
+
+        ResponseEntity<Double> exchange = restTemplate.exchange(
+                "http://localhost:" + port + "/student/avgAgeByStream",
+                HttpMethod.GET,
+                null,
+                Double.class);
+        assertEquals(HttpStatus.OK, exchange.getStatusCode());
+        assertEquals(List.of(harry, ron,harryJr), exchange.getBody());
+    }
+ @Test
+    void findNameWithFirstLetterIsA__returnSortedNamesStartedWithA() {
+        studentRepository.save(harry);
+        studentRepository.save(ron);
+
+        ResponseEntity<List<String>> exchange = restTemplate.exchange(
+                "http://localhost:" + port + "/student/aName",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                });
+        assertEquals(HttpStatus.OK, exchange.getStatusCode());
+        assertEquals(List.of(harry.getName(),ron.getName()), exchange.getBody());
+    }
+
 
 
 }

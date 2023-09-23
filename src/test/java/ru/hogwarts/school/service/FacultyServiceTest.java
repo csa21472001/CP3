@@ -1,5 +1,6 @@
 package ru.hogwarts.school.service;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,10 +30,11 @@ class FacultyServiceTest {
     @Mock
     StudentRepository studentRepository;
     Faculty faculty = new Faculty(4L, "Puffendor", "yellow");
+    Faculty facultyG = new Faculty(1L, "Griffindor", "red");
     Student student = new Student(1L, "Harry", 10);
 
     @BeforeEach
-    void beforeEach() {
+    void beforeAll() {
         student.setFaculty(faculty);
     }
 
@@ -130,4 +132,17 @@ class FacultyServiceTest {
         assertThrows(FacultyException.class,
                 () -> underTest.findFacultyByString(faculty.getColor(),faculty.getName()));
     }
+    @Test
+    void findLongestFcltName_noneFclts_throwException() {
+        when(facultyRepository.findAll()).thenReturn(Collections.emptyList());
+        assertThrows(FacultyException.class,
+                () -> underTest.findLongestFcltName());
+    }
+    @Test
+    void findLongestFcltName_listOfFclt_returnTheLongestName()  {
+        when(facultyRepository.findAll()).thenReturn(List.of(faculty,facultyG));
+        String fclt = underTest.findLongestFcltName();
+        assertEquals(facultyG.getName(),fclt);
+    }
+
 }

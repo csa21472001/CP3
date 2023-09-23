@@ -140,12 +140,12 @@ public class FacultyServiceImpl implements FacultyService {
         return faculties;
     }
 
-//    @Override
-//    public String findLongestFcltName() {
-//        return facultyRepository.findAll().stream()
-//                .map(faculty -> faculty.getName())
-//                .max(Comparator.comparingInt(name ->name.length()))
-//                .orElseThrow(() -> new FacultyException("No faculty Name"));
-//    }
+    @Override
+    public String findLongestFcltName() {
+        return facultyRepository.findAll().stream()
+                .map(faculty -> faculty.getName())
+                .max(Comparator.comparingInt(name ->name.length()))
+                .orElseThrow(() -> new FacultyException("No faculty Name"));
+    }
 
 }
